@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP Interactif : L'Inspecteur HTML5</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    html, body { height: 100%; margin: 0; padding: 15px; background-color: #f4f6f9; color: #333; overflow: hidden; }
+    
+    body { display: flex; flex-direction: column; }
+
+    header { text-align: center; margin-bottom: 15px; flex-shrink: 0; }
+    header h1 { color: #2c3e50; margin: 0 0 5px 0; font-size: 1.6rem; }
+    header p { margin: 0 0 5px 0; font-size: 0.95rem; }
+    .score-board { font-size: 1.1rem; font-weight: bold; color: #2980b9; }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .preview-box, .quiz-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border: 2px solid #e0e0e0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .preview-title { 
+      font-size: 0.85rem; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      color: #7f8c8d; 
+      margin-bottom: 12px; 
+      border-bottom: 2px solid #eee; 
+      padding-bottom: 5px;
+      flex-shrink: 0;
+    }
+
+    .challenge-zone {
+      border: 2px dashed #bdc3c7;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+    .challenge-zone.solved {
+      border-color: #2ecc71;
+      background: #e8f8f5;
+    }
+
+    .profile-img { 
+      width: 90px; 
+      height: 90px; 
+      object-fit: cover; 
+      border-radius: 50%; 
+      border: 3px solid #3498db;
+      display: block;
+      margin: 0 auto 5px auto; 
+    }
+    
+    .custom-span { color: #e74c3c; font-weight: bold; }
+
+    .card {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+    .card h4 { margin: 0 0 8px 0; color: #2c3e50; font-size: 0.9rem; }
+    
+    .options { display: flex; flex-wrap: wrap; gap: 6px; }
+    .btn-opt {
+      flex: 1 1 calc(50% - 6px);
+      background: #ffffff;
+      border: 1px solid #3498db;
+      color: #3498db;
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .btn-opt:hover { background: #3498db; color: white; }
+    .btn-opt.correct { background: #2ecc71 !important; color: white !important; border-color: #2ecc71 !important; }
+    .btn-opt.wrong { background: #e74c3c !important; color: white !important; border-color: #e74c3c !important; }
+
+    .code-reveal {
+      display: none;
+      margin-top: 6px;
+      background: #272822;
+      color: #f8f8f2;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Exercice 1: Retrouvez la balise HTML5!</h1>
+  <p>Observez la page à gauche et devinez quelle balise a été utilisée pour chaque élément.</p>
+  <div class="score-board">Score : <span id="score">0</span> / 12</div>
+</header>
+
+<div class="container">
+  
+  <!-- GAUCHE : LE RENDU VISUEL -->
+  <div class="preview-box">
+    <div class="preview-title">Aperçu du rendu visuel de la page</div>
+
+    <div id="target-div" class="challenge-zone">
+      
+      <div id="target-img" style="text-align: center;">
+        <img src="../images/popey.jpg" alt="Photo de Popeye" class="profile-img">
+      </div>
+
+
+      <div id="target-h1" class="challenge-zone" style="text-align: center;">
+        <h1 style="margin:0; font-size: 1.3rem;">Youssef Tounsi - Étudiant L1</h1>
+      </div>
+
+      <div id="target-p" class="challenge-zone">
+        <p style="margin:0; font-size: 0.9rem;">
+          Bienvenue sur mon portfolio ! Je suis passionné par le 
+          <span id="target-strong" style="font-weight:bold;">développement web</span> 
+          et je suis actuellement en 
+          <span id="target-span" class="custom-span">Statut : En Recherche de Stage</span>.
+        </p>
+      </div>
+
+      <div id="target-h2" class="challenge-zone">
+        <h2 style="margin:0; font-size: 1.1rem; color:#34495e;">Mes Compétences</h2>
+      </div>
+
+      <div id="target-h3" class="challenge-zone">
+        <h3 style="margin:0; font-size: 0.95rem; color:#7f8c8d;">Outils Informatiques</h3>
+      </div>
+
+      <div id="target-ul" class="challenge-zone">
+        <ul style="margin:0; padding-left: 20px; font-size: 0.88rem;">
+          <li>Éditeur Visual Studio Code</li>
+          <li>Navigateurs (Chrome, Firefox)</li>
+        </ul>
+      </div>
+
+      <div id="target-ol" class="challenge-zone">
+        <p style="margin:0 0 5px 0; font-weight:bold; font-size: 0.88rem;">Étapes de résolution d'un problème :</p>
+        <ol style="margin:0; padding-left: 20px; font-size: 0.88rem;">
+          <li>Lire l'énoncé</li>
+          <li>Écrire l'algorithme</li>
+          <li>Coder en HTML/CSS</li>
+        </ol>
+      </div>
+
+      <div id="target-dl" class="challenge-zone">
+        <dl style="margin:0; font-size: 0.85rem;">
+          <dt style="font-weight:bold;">HTML5</dt>
+          <dd style="margin-left: 15px; margin-bottom: 4px;">Langage de balisage pour structurer le Web.</dd>
+          <dt style="font-weight:bold;">CSS3</dt>
+          <dd style="margin-left: 15px;">Feuilles de style pour mettre en forme les pages web.</dd>
+        </dl>
+      </div>
+
+      <div id="target-a" class="challenge-zone" style="text-align: center;">
+        <a href="#" onclick="return false;" style="color: #3498db; font-size: 0.9rem;">Consulter mon profil GitHub</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DROITE : LES QUESTIONS EN DÉSORDRE -->
+  <div class="quiz-box">
+    
+    <!-- M Question 1 -->
+    <div class="card" id="card-ul">
+      <h4>1. La liste à puces des outils informatiques</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('ul', 'ol', this)">ol</button>
+        <button class="btn-opt" onclick="checkAnswer('ul', 'ul', this)">ul</button>
+        <button class="btn-opt" onclick="checkAnswer('ul', 'dl', this)">dl</button>
+        <button class="btn-opt" onclick="checkAnswer('ul', 'li', this)">li</button>
+      </div>
+      <div class="code-reveal" id="code-ul">&lt;ul&gt;&lt;li&gt;VS Code&lt;/li&gt;...&lt;/ul&gt;</div>
+    </div>
+
+    <!-- Question 2  -->
+    <div class="card" id="card-strong">
+      <h4>2. Le texte important en gras : "développement web"</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('strong', 'b', this)">b</button>
+        <button class="btn-opt" onclick="checkAnswer('strong', 'strong', this)">strong</button>
+        <button class="btn-opt" onclick="checkAnswer('strong', 'h3', this)">h3</button>
+        <button class="btn-opt" onclick="checkAnswer('strong', 'em', this)">em</button>
+      </div>
+      <div class="code-reveal" id="code-strong">&lt;strong&gt;développement web&lt;/strong&gt;</div>
+    </div>
+
+    <!-- Question 3  -->
+    <div class="card" id="card-img">
+      <h4>3. L'image de profil (Popeye)</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('img', 'img', this)">img</button>
+        <button class="btn-opt" onclick="checkAnswer('img', 'image', this)">image</button>
+        <button class="btn-opt" onclick="checkAnswer('img', 'src', this)">src</button>
+        <button class="btn-opt" onclick="checkAnswer('img', 'pic', this)">pic</button>
+      </div>
+      <div class="code-reveal" id="code-img">&lt;img src="popey.jpg" alt="Photo de Popeye"&gt;</div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="card" id="card-h2">
+      <h4>4. Le titre de section "Mes Compétences"</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('h2', 'h1', this)">h1</button>
+        <button class="btn-opt" onclick="checkAnswer('h2', 'h2', this)">h2</button>
+        <button class="btn-opt" onclick="checkAnswer('h2', 'strong', this)">strong</button>
+        <button class="btn-opt" onclick="checkAnswer('h2', 'h3', this)">h3</button>
+      </div>
+      <div class="code-reveal" id="code-h2">&lt;h2&gt;Mes Compétences&lt;/h2&gt;</div>
+    </div>
+
+    <!-- Question 5  -->
+    <div class="card" id="card-a">
+      <h4>5. Le lien cliquable vers le profil GitHub</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('a', 'link', this)">link</button>
+        <button class="btn-opt" onclick="checkAnswer('a', 'a', this)">a</button>
+        <button class="btn-opt" onclick="checkAnswer('a', 'href', this)">href</button>
+        <button class="btn-opt" onclick="checkAnswer('a', 'url', this)">url</button>
+      </div>
+      <div class="code-reveal" id="code-a">&lt;a href="https://github.com"&gt;Consulter...&lt;/a&gt;</div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="card" id="card-h1">
+      <h4>6. Le titre principal "Youssef Tounsi - Étudiant L1"</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('h1', 'p', this)">p</button>
+        <button class="btn-opt" onclick="checkAnswer('h1', 'h1', this)">h1</button>
+        <button class="btn-opt" onclick="checkAnswer('h1', 'h3', this)">h3</button>
+        <button class="btn-opt" onclick="checkAnswer('h1', 'header', this)">header</button>
+      </div>
+      <div class="code-reveal" id="code-h1">&lt;h1&gt;Youssef Tounsi - Étudiant L1&lt;/h1&gt;</div>
+    </div>
+
+    <!-- Question 7  -->
+    <div class="card" id="card-dl">
+      <h4>7. La liste de définitions pour HTML5 et CSS3</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('dl', 'ul', this)">ul</button>
+        <button class="btn-opt" onclick="checkAnswer('dl', 'dl', this)">dl</button>
+        <button class="btn-opt" onclick="checkAnswer('dl', 'ol', this)">ol</button>
+        <button class="btn-opt" onclick="checkAnswer('dl', 'dt', this)">dt</button>
+      </div>
+      <div class="code-reveal" id="code-dl">&lt;dl&gt;&lt;dt&gt;HTML5&lt;/dt&gt;&lt;dd&gt;...&lt;/dd&gt;&lt;/dl&gt;</div>
+    </div>
+
+    <!-- Question 8 -->
+    <div class="card" id="card-p">
+      <h4>8. Le bloc de texte "Bienvenue sur mon portfolio..."</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('p', 'span', this)">span</button>
+        <button class="btn-opt" onclick="checkAnswer('p', 'p', this)">p</button>
+        <button class="btn-opt" onclick="checkAnswer('p', 'div', this)">div</button>
+        <button class="btn-opt" onclick="checkAnswer('p', 'section', this)">section</button>
+      </div>
+      <div class="code-reveal" id="code-p">&lt;p&gt;Bienvenue sur mon portfolio...&lt;/p&gt;</div>
+    </div>
+
+    <!-- Question 9  -->
+    <div class="card" id="card-div">
+      <h4>9. Le conteneur global de la carte de profil</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('div', 'span', this)">span</button>
+        <button class="btn-opt" onclick="checkAnswer('div', 'body', this)">body</button>
+        <button class="btn-opt" onclick="checkAnswer('div', 'div', this)">div</button>
+        <button class="btn-opt" onclick="checkAnswer('div', 'main', this)">main</button>
+      </div>
+      <div class="code-reveal" id="code-div">&lt;div class="profile-card"&gt;...&lt;/div&gt;</div>
+    </div>
+
+    <!-- Question 10  -->
+    <div class="card" id="card-h3">
+      <h4>10. Le sous-titre "Outils Informatiques"</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('h3', 'h3', this)">h3</button>
+        <button class="btn-opt" onclick="checkAnswer('h3', 'p', this)">p</button>
+        <button class="btn-opt" onclick="checkAnswer('h3', 'h1', this)">h1</button>
+        <button class="btn-opt" onclick="checkAnswer('h3', 'h2', this)">h2</button>
+      </div>
+      <div class="code-reveal" id="code-h3">&lt;h3&gt;Outils Informatiques&lt;/h3&gt;</div>
+    </div>
+
+    <!-- Question 11  -->
+    <div class="card" id="card-span">
+      <h4>11. Le fragment de texte stylisé "Statut : En Recherche..."</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('span', 'div', this)">div</button>
+        <button class="btn-opt" onclick="checkAnswer('span', 'span', this)">span</button>
+        <button class="btn-opt" onclick="checkAnswer('span', 'p', this)">p</button>
+        <button class="btn-opt" onclick="checkAnswer('span', 'mark', this)">mark</button>
+      </div>
+      <div class="code-reveal" id="code-span">&lt;span class="custom-span"&gt;Statut...&lt;/span&gt;</div>
+    </div>
+
+    <!-- Question 12 (anciennement Q9 - OL) -->
+    <div class="card" id="card-ol">
+      <h4>12. La liste ordonnée (1, 2, 3) des étapes</h4>
+      <div class="options">
+        <button class="btn-opt" onclick="checkAnswer('ol', 'ol', this)">ol</button>
+        <button class="btn-opt" onclick="checkAnswer('ol', 'ul', this)">ul</button>
+        <button class="btn-opt" onclick="checkAnswer('ol', 'dl', this)">dl</button>
+        <button class="btn-opt" onclick="checkAnswer('ol', 'list', this)">list</button>
+      </div>
+      <div class="code-reveal" id="code-ol">&lt;ol&gt;&lt;li&gt;Lire...&lt;/li&gt;...&lt;/ol&gt;</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let score = 0;
+  const answered = {};
+
+  function checkAnswer(tag, selectedOption, btn) {
+    // Si la question a déjà été validée avec la bonne réponse, on ne fait rien
+    if (answered[tag]) return;
+
+    const cardContainer = document.getElementById('card-' + tag);
+    const targetElem = document.getElementById('target-' + tag);
+    const codeElem = document.getElementById('code-' + tag);
+
+    // 1. Réinitialiser la couleur de TOUS les boutons de cette question
+    const allButtons = cardContainer.querySelectorAll('.btn-opt');
+    allButtons.forEach(b => {
+      b.classList.remove('wrong');
+      b.classList.remove('correct');
+    });
+
+    // 2. Traitement selon la réponse cliquée
+    if (tag === selectedOption) {
+      // Bonne réponse : passe en vert
+      btn.classList.add('correct');
+      score++;
+      document.getElementById('score').innerText = score;
+      
+      if (targetElem) {
+        targetElem.classList.add('solved');
+      }
+      if (codeElem) {
+        codeElem.style.display = 'block';
+      }
+      // Verrouille la question pour ne plus pouvoir changer la bonne réponse
+      answered[tag] = true;
+    } else {
+      // Mauvaise réponse : passe en rouge (les autres boutons restent neutres)
+      btn.classList.add('wrong');
+    }
+  }
+</script>
+    <a href="../index.html">Retour à l'accueil </a>
+
+</body>
+</html>

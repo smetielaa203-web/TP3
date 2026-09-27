@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Titre de la page</title>
+  <meta charset="utf-8">
+  <style>
+    body {
+            background-color: #f0f4f8;
+            color: #22427a;
+        }
+
+    h1 {
+            color: #22427a;
+            font-weight: 100px;
+        }
+
+    h2 {
+            background-color: #fecbf;
+            padding: 8px;
+            margin-right: 12px;
+         }
+
+    p {
+            font-weight: bold;
+            color: red;
+            text-decoration: underline;
+        }
+
+    #list {
+            list-style-image: url("../images/check.png");
+            color: orange;
+        }
+
+    #ordered-list {
+            list-style-type: lower-alpha;
+            list-style-position: inside;
+        }
+    .important {
+      font-style:italic;
+      color: green;
+    }
+    .heighlight{
+      background-color:#fecbf ;
+      padding:4px 8px;
+    }
+    </style>
+</head>
+
+<body>
+  <div>
+
+    <h1>Mon Titre Principal avec un retour à la ligne </h1>
+   <p class="important">Ceci est un paragraphe.<br>Un autre texte ici.</p>
+    
+    <h2>Sous-titre</h2>
+    <p>Le paragraphe contient une division</p>
+    <img src="popey.jpg" width="100" height="100" alt="photo popey">
+
+    <ul id="list">
+      <li>Élément de liste 1</li>
+      <li class="highlight important">Élément de liste 2</li>
+    </ul>
+
+    <ol id="ordered-list">
+      <li>Premier item
+      <p id="ordered-list">Un paragraphe à l'intérieur</p></li>
+      <li class="highlight important">Deuxième item</li>
+    </ol>
+  </div>
+      <a href="../index.html">Retour à l'accueil </a>
+
+</body>
+</html>
