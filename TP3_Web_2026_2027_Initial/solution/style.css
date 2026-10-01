@@ -47,6 +47,29 @@ body {
     font-weight: bold;
     color: #1e3c72;
 }.items li {
-    color: #444444;                  /* Couleur du texte de la liste */
-    margin-bottom: 8px;              /* Espacement entre chaque élément */
+    color: #444444;                 
+    margin-bottom: 8px;              
+}
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-right: 5px;
+    margin-top: 4px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+.btn-primary {
+    background-color: #1e3c72;
+    color: #ffffff;
+}
+.btn-success {
+    background-color: #28a745;
+    color: #ffffff;
+}
+.footer-link {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
 }
